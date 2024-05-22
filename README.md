@@ -1,8 +1,10 @@
-# Image Management System Task
+# Wexler Code Task
 
-This task consists of developing a  image upload and management system where users can upload multiple images to Imgur, view a list of uploaded images, and see them displayed. The task is divided into two parts: the UI (frontend) and the API (backend).
+Wexler's app includes a page to upload documents, which are then sent for processing in our Machine Learning pipeline. This task is to build a simple version of this page for images. 
 
 ## Task Overview
+
+This task consists of developing an image upload and management system where users can upload multiple images to Imgur, view a list of uploaded images, and see them displayed. The task is divided into two parts: the UI (frontend) and the API (backend).
 
 ### Part 1: UI (Frontend)
 
@@ -23,15 +25,10 @@ The backend application should be built using Node.js and Express. It will handl
 - Provide endpoints to upload images and retrieve the list of uploaded images.
 - Handle both large and small image files efficiently.
 
-## Repositories
+## Repo structure
 
-### Frontend Repository
-
-The frontend part of the task is hosted in the ui subfolder.
-
-### Backend Repository
-
-The backend part of the task is hosted in api subfolder.
+- The frontend part of the task is hosted in the ui subfolder.
+- The backend part of the task is hosted in api subfolder.
 
 ## Getting Started
 
