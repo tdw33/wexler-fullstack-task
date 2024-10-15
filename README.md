@@ -35,4 +35,7 @@ The backend application should be built using Node.js and Express. It will handl
 ### Prerequisites
 
 - Node.js and Yarn installed on your machine.
-- An Imgur account and a registered application to obtain a Client ID.
+
+### Deliverable
+
+- A forked repository with your solution implemented
