@@ -3,11 +3,18 @@ import dotenv from "dotenv";
 import multer from "multer";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 9001;
+
+const corsOptions = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 const upload = multer({
   storage: multer.memoryStorage(),
