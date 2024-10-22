@@ -22,6 +22,5 @@ describe("AddImageBox Component", () => {
     expect(addImageBox).toHaveClass("flex");
     expect(addImageBox).toHaveClass("items-center");
     expect(addImageBox).toHaveClass("justify-center");
-    // Add more class checks as needed based on your actual implementation
   });
 });
