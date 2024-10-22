@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FileUploader } from "react-drag-drop-files";
 import ImageGrid from "../organisms/ImageGrid";
 import Modal from "../molecules/Modal";
-import Button from "../atoms/Button";
 import SkeletonCard from "../molecules/SkeletonCard";
 
 const ImageContainer = () => {
@@ -11,7 +11,7 @@ const ImageContainer = () => {
   const [selectedFiles, setSelectedFiles] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef(null);
+  const [uploadedFileNames, setUploadedFileNames] = useState([]);
 
   useEffect(() => {
     fetchImages();
@@ -33,17 +33,17 @@ const ImageContainer = () => {
     setIsModalOpen(true);
   };
 
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    const validFiles = files.filter((file) => file.type.startsWith("image/"));
-    if (validFiles.length !== files.length) {
-      alert("Only image files are allowed");
-    }
-    setSelectedFiles(validFiles);
+  const handleFileChange = (files) => {
+    setSelectedFiles(files);
+    setUploadedFileNames(Array.from(files).map((file) => file.name));
   };
 
-  const handleChooseFiles = () => {
-    fileInputRef.current.click();
+  const handleRemoveFile = (fileName) => {
+    const updatedFiles = Array.from(selectedFiles).filter(
+      (file) => file.name !== fileName
+    );
+    setSelectedFiles(updatedFiles);
+    setUploadedFileNames(updatedFiles.map((file) => file.name));
   };
 
   const handleUpload = async () => {
@@ -64,8 +64,8 @@ const ImageContainer = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("Images uploaded successfully");
       setSelectedFiles(null);
+      setUploadedFileNames([]);
       setIsModalOpen(false);
       await fetchImages();
     } catch (error) {
@@ -91,6 +91,7 @@ const ImageContainer = () => {
         isOpen={isModalOpen}
         onClose={() => {
           setSelectedFiles(null);
+          setUploadedFileNames([]);
           setIsModalOpen(false);
         }}
         onSubmit={handleUpload}
@@ -98,28 +99,53 @@ const ImageContainer = () => {
         onSubmitDisabled={!selectedFiles || selectedFiles.length === 0}
         isLoading={isUploading}
       >
-        <div className="flex items-center justify-center w-full">
-          <Button
-            onClick={handleChooseFiles}
-            variation="filled"
-            color="primary"
+        <div className="w-full">
+          <FileUploader
+            multiple={true}
+            handleChange={handleFileChange}
+            name="file"
+            types={["JPG", "PNG", "JPEG"]}
             disabled={isUploading}
           >
-            Choose files
-          </Button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            onChange={handleFileChange}
-            multiple
-            accept="image/*"
-            className="hidden"
-          />
-          <span className="ml-3 text-sm">
+            <div className="w-full h-64 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer">
+              <div className="text-center">
+                <p className="text-lg font-semibold text-gray-500">
+                  Drag & Drop files here
+                </p>
+                <p className="text-sm text-gray-400">
+                  or click to select files
+                </p>
+              </div>
+            </div>
+          </FileUploader>
+          <span className="mt-3 text-sm block text-center">
             {selectedFiles
               ? `${selectedFiles.length} file(s) selected`
               : "No file chosen"}
           </span>
+          {uploadedFileNames.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-sm font-semibold mb-2">Selected Files:</h4>
+              <div className="flex flex-wrap gap-2">
+                {uploadedFileNames.map((fileName, index) => (
+                  <div
+                    key={`${fileName}-${index}`}
+                    className="flex items-center bg-gray-100 rounded-md p-2"
+                  >
+                    <span className="text-sm text-gray-600 mr-2">
+                      {fileName}
+                    </span>
+                    <button
+                      onClick={() => handleRemoveFile(fileName)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      &#10005;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </Modal>
     </div>
