@@ -8,7 +8,7 @@ const ImageGrid = ({ images, onAddImage }) => {
       {images.map((image) => (
         <ImageThumbnail key={image.id} src={image.url} alt={image.name} />
       ))}
-      <AddImageBox onClick={onAddImage} />
+      <AddImageBox onClick={onAddImage} width="w-48" height="h-48" />
     </div>
   );
 };
