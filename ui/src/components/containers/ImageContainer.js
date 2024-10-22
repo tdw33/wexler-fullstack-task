@@ -34,7 +34,12 @@ const ImageContainer = () => {
   };
 
   const handleFileChange = (event) => {
-    setSelectedFiles(event.target.files);
+    const files = Array.from(event.target.files);
+    const validFiles = files.filter((file) => file.type.startsWith("image/"));
+    if (validFiles.length !== files.length) {
+      alert("Only image files are allowed");
+    }
+    setSelectedFiles(validFiles);
   };
 
   const handleChooseFiles = () => {
@@ -84,7 +89,10 @@ const ImageContainer = () => {
       )}
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setSelectedFiles(null);
+          setIsModalOpen(false);
+        }}
         onSubmit={handleUpload}
         title="Upload Images"
         onSubmitDisabled={!selectedFiles || selectedFiles.length === 0}
